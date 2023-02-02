@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+
+  mysql:
+    image: mysql:8.0.28
+    container_name: mysql-container
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db/data_mysql:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+
+  postgresql:
+    image: postgres:14.1
+    container_name: postgresql-container
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db/data_postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+
+  node:
+    image: "node"
+    container_name: node
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./gate-simulator:/home/node/app
+    ports:
+      - '9999:9999'
+    command: "npm start"
